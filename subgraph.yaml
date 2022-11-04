@@ -1,0 +1,96 @@
+specVersion: 0.0.5
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: PairFactory
+    network: mainnet
+    source:
+      address: '0x6aFF0d25C7801a84241ae1537FC05B79C12c9629'
+      abi: LSSVMPairFactory
+      startBlock: 15835274
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+
+      entities:
+        - Pair
+        - DepositNFT
+
+      abis:
+        - name: LSSVMPairFactory
+          file: ./abis/LSSVMPairFactory.json
+      eventHandlers:
+        - event: NewPair(address)
+          handler: handleNewPairEvent
+        - event: NFTDeposit(address)
+          handler: handlerNFTDeposit
+        - event: ProtocolFeeMultiplierUpdate(uint256)
+          handler: handleProtocolFeeMultiplierUpdate
+
+      callHandlers:
+        - function: createPairETH(address,address,address,uint8,uint128,uint96,uint128,uint256[])
+          handler: handleCreatePairETH
+        - function: depositNFTs(address,uint256[],address)
+          handler: handleDepositNFTs
+
+      file: ./src/mapping-factory.ts
+
+
+templates:
+  - kind: ethereum
+    name: LSSVMPairEnumerableETH
+    network: mainnet
+    source:
+      abi: LSSVMPairEnumerableETH
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+
+        - NFTWithdrawal
+
+      abis:
+        - name: LSSVMPairEnumerableETH
+          file: ./abis/LSSVMPairEnumerableETH.json
+      eventHandlers:
+        - event: NFTWithdrawal()
+          handler: handleNFTWithdrawal
+        - event: SwapNFTInPair()
+          handler: handleSwapNFTInPair
+        - event: TokenDeposit(uint256)
+          handler: handleTokenDeposit
+        - event: TokenWithdrawal(uint256)
+          handler: handleTokenWithdrawal
+        - event: SwapNFTOutPair()
+          handler: handleSwapNFTOutPair
+
+        - event: SpotPriceUpdate(uint128)
+          handler: handleSpotPriceUpdate
+        - event: FeeUpdate(uint96)
+          handler: handleFeeUpdate
+        - event: DeltaUpdate(uint128)
+          handler: handleDeltaUpdate
+        - event: AssetRecipientChange(address)
+          handler: handleAssetRecipientChange
+
+
+      callHandlers:
+        - function: withdrawERC721(address,uint256[])
+          handler: handleWithdrawERC721
+
+        - function: swapNFTsForToken(uint256[],uint256,address,bool,address)
+          handler: handleSwapNFTsForToken
+
+        - function: swapTokenForAnyNFTs(uint256,uint256,address,bool,address)
+          handler: handleSwapTokenForAnyNFTs
+        - function: swapTokenForSpecificNFTs(uint256[],uint256,address,bool,address)
+          handler: handleSwapTokenForSpecificNFTs
+
+
+      file: ./src/mapping-pair.ts
+
+
+
