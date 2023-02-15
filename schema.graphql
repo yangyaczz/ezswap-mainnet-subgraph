@@ -7,49 +7,28 @@ type Pair @entity {
   type: BigInt
   assetRecipient: String
   bondingCurve: String
+  bondingCurveType: BigInt
   delta: BigInt
   fee: BigInt
+  lastSpotPrice: BigInt
   spotPrice: BigInt
   nftIds: [BigInt!]
+  lastNftCount: BigInt
   nftCount: BigInt
   ethBalance: BigInt
   tokenBalance: BigInt
   ethVolume: BigInt
+  swapCount: BigInt
   createTimestamp: BigInt
   updateTimestamp: BigInt
-}
-
-
-type DepositNFT @entity {
-  id: ID!
-  count: BigInt
-  collection: String
-  pair: String
-}
-
-
-type NFTWithdrawal @entity {
-  id: ID!
-  count: BigInt
-}
-
-
-
-type NFTInPair @entity {
-  id: ID!
-  count: BigInt
-  pair: String!
-}
-
-type NFTOutPair @entity {
-  id: ID!
-  pair: String!
 }
 
 type ProtocolFeeMultiplier @entity {
   id:  ID!
   pfm: BigInt
 }
+
+
 
 
 

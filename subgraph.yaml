@@ -16,14 +16,17 @@ dataSources:
 
       entities:
         - Pair
-        - DepositNFT
+        - ProtocolFeeMultiplier
 
       abis:
         - name: LSSVMPairFactory
           file: ./abis/LSSVMPairFactory.json
+        - name: LSSVMPairEnumerableETH
+          file: ./abis/LSSVMPairEnumerableETH.json
+        - name: IERC721
+          file: ./abis/IERC721.json
+
       eventHandlers:
-        - event: NewPair(address)
-          handler: handleNewPairEvent
         - event: NFTDeposit(address)
           handler: handlerNFTDeposit
         - event: ProtocolFeeMultiplierUpdate(uint256)
@@ -32,8 +35,7 @@ dataSources:
       callHandlers:
         - function: createPairETH(address,address,address,uint8,uint128,uint96,uint128,uint256[])
           handler: handleCreatePairETH
-        - function: depositNFTs(address,uint256[],address)
-          handler: handleDepositNFTs
+        
 
       file: ./src/mapping-factory.ts
 
@@ -50,23 +52,27 @@ templates:
       language: wasm/assemblyscript
       entities:
 
-        - NFTWithdrawal
+        - Pair
 
       abis:
         - name: LSSVMPairEnumerableETH
           file: ./abis/LSSVMPairEnumerableETH.json
+        - name: IERC721
+          file: ./abis/IERC721.json
       eventHandlers:
         - event: NFTWithdrawal()
           handler: handleNFTWithdrawal
         - event: SwapNFTInPair()
           handler: handleSwapNFTInPair
+        - event: SwapNFTOutPair()
+          handler: handleSwapNFTOutPair
         - event: TokenDeposit(uint256)
           handler: handleTokenDeposit
         - event: TokenWithdrawal(uint256)
           handler: handleTokenWithdrawal
-        - event: SwapNFTOutPair()
-          handler: handleSwapNFTOutPair
-
+        
+        - event: OwnershipTransferred(indexed address)
+          handler: handleOwnershipTransferred
         - event: SpotPriceUpdate(uint128)
           handler: handleSpotPriceUpdate
         - event: FeeUpdate(uint96)
@@ -76,10 +82,9 @@ templates:
         - event: AssetRecipientChange(address)
           handler: handleAssetRecipientChange
 
-
       callHandlers:
         - function: withdrawERC721(address,uint256[])
-          handler: handleWithdrawERC721
+          handler: handleNFTWithdrawal
 
         - function: swapNFTsForToken(uint256[],uint256,address,bool,address)
           handler: handleSwapNFTsForToken
