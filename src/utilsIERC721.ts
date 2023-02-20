@@ -1,5 +1,5 @@
 import { Address, BigInt } from "@graphprotocol/graph-ts";
-import { IERC721 } from "../generated/PairFactory/IERC721";
+import { IERC721 } from "../generated/PairFactory/IERC721";  
 import { LSSVMPairEnumerableETH } from "../generated/PairFactory/LSSVMPairEnumerableETH";
 
 
