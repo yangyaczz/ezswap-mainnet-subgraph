@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: PairFactory
-    network: mainnet
+    network: matic
     source:
-      address: '0x6aFF0d25C7801a84241ae1537FC05B79C12c9629'
+      address: '0x4332465E5C9Ac98e91EEeeCe7989bDD0387f0cBA'
       abi: LSSVMPairFactory
-      startBlock: 15835274
+      startBlock: 37848464
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -27,14 +27,12 @@ dataSources:
           file: ./abis/IERC721.json
 
       eventHandlers:
+        - event: NewPair(address)
+          handler: handleNewPair
         - event: NFTDeposit(address)
           handler: handlerNFTDeposit
         - event: ProtocolFeeMultiplierUpdate(uint256)
           handler: handleProtocolFeeMultiplierUpdate
-
-      callHandlers:
-        - function: createPairETH(address,address,address,uint8,uint128,uint96,uint128,uint256[])
-          handler: handleCreatePairETH
         
 
       file: ./src/mapping-factory.ts
@@ -43,7 +41,7 @@ dataSources:
 templates:
   - kind: ethereum
     name: LSSVMPairEnumerableETH
-    network: mainnet
+    network: matic
     source:
       abi: LSSVMPairEnumerableETH
     mapping:
@@ -71,6 +69,7 @@ templates:
         - event: TokenWithdrawal(uint256)
           handler: handleTokenWithdrawal
         
+
         - event: OwnershipTransferred(indexed address)
           handler: handleOwnershipTransferred
         - event: SpotPriceUpdate(uint128)
@@ -81,18 +80,6 @@ templates:
           handler: handleDeltaUpdate
         - event: AssetRecipientChange(address)
           handler: handleAssetRecipientChange
-
-      callHandlers:
-        - function: withdrawERC721(address,uint256[])
-          handler: handleNFTWithdrawal
-
-        - function: swapNFTsForToken(uint256[],uint256,address,bool,address)
-          handler: handleSwapNFTsForToken
-
-        - function: swapTokenForAnyNFTs(uint256,uint256,address,bool,address)
-          handler: handleSwapTokenForAnyNFTs
-        - function: swapTokenForSpecificNFTs(uint256[],uint256,address,bool,address)
-          handler: handleSwapTokenForSpecificNFTs
 
 
       file: ./src/mapping-pair.ts
